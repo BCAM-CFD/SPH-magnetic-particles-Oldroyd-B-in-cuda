@@ -27,6 +27,8 @@ dim     -> Number of dimensions
 
 dt      -> Time steps
 
+t0      -> Initial time
+
 Nsteps  -> Number of steps
 
 overlap -> rcut / dx   (where dx = L/N)
@@ -41,13 +43,21 @@ eta     -> shear viscosity
 
 zeta    -> bulk viscosity
 
+np      -> number of polymers per particle
+
+kT      -> Boltzmann constant multiplied by temperature
+
+tau     -> Relaxation time of the Oldroyd-B model
+
 ext_force_type -> Type of external force:
 
 	       0: No external force
-		   
+
 		   1: Constant force
-		   
+
 		   2: sine force
+
+		   3: force to simulate inverse Poiseuille flow
 		   
 ext_force -> External force vector
 
