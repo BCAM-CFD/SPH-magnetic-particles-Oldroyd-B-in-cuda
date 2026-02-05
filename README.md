@@ -286,4 +286,5 @@ To restart a simulation
 	   7.- mass
 	   
 	   8.- type of particle
-4.- Run the simulation
+	   
+6.- Run the simulation
