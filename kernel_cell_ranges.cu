@@ -1,0 +1,33 @@
+/******************************************************
+This code has been developed by Adolfo Vazquez-Quesada,
+from the Department of Fundamental Physics at UNED, in
+Madrid, Spain.
+email: a.vazquez-quesada@fisfun.uned.es
+********************************************************/
+#include "kernel_functions.h"
+#include <assert.h>
+#include <stdio.h>
+
+// Function to calculate start and end indices of the cell_list
+__global__ void kernel_cell_ranges(int* __restrict__ particle_cell,
+				   int* __restrict__ cell_start,
+				   int* __restrict__ cell_end) {
+    int i = threadIdx.x + blockIdx.x * blockDim.x;
+    if (i >= N) return;
+
+    int current_cell = particle_cell[i];
+    if (current_cell < 0 || current_cell > Ntotal_cells - 1) {
+      printf("kernel cell ranges error: a particle has not a proper cell assigned. Assigned cell = %d \n", current_cell);
+      assert(0);
+    }    
+
+    // It detects the beginning of a cell
+    if (i == 0 || particle_cell[i - 1] != current_cell)
+        cell_start[current_cell] = i;
+
+    // It detects the end of a cell
+    if (i == N - 1 || particle_cell[i + 1] != current_cell)
+        cell_end[current_cell] = i;
+
+}
+
