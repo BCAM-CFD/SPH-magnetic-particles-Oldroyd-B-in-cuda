@@ -109,7 +109,7 @@ new_sim ->
 
        0: new simulation.
 	   
-	   1: existing simulation (the orientation of the magnetic field is not currently read in this option)
+	   1: existing simulation
 
 ************************************
 Key of the output files
