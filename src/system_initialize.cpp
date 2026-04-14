@@ -224,7 +224,6 @@ int class_system::initialize(int  Nxyz[3],
       rcutoff_coll    = rcutoff_coll_rep;
     else
       rcutoff_coll = r0_magnet;    
-    rcutoff_coll          = rcutoff_coll_rep;
     rcutoff_coll_sq       = rcutoff_coll * rcutoff_coll;
     Ncells_colloids[0]    = (int)(L[0]/rcutoff_coll);
     cell_colloids_size[0] = L[0] / Ncells_colloids[0];  
