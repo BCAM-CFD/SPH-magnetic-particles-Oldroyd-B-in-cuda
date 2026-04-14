@@ -1,7 +1,8 @@
 /******************************************************
-This code has been developed by Adolfo Vazquez-Quesada,
-from the Department of Fundamental Physics at UNED, in
-Madrid, Spain.
+This code has been developed by:
+Adolfo Vazquez-Quesada (1) and Jose Manuel Moreno Valderrama (2)
+(1) Department of Fundamental Physics at UNED, Madrid, Spain
+(2) Remedy Entertainment
 email: a.vazquez-quesada@fisfun.uned.es
 ********************************************************/
 
@@ -429,9 +430,6 @@ struct class_system {
 		       real* k_tx_colloid,
 		       real* k_ty_colloid,
 		       real* k_tz_colloid,
-		       real* k_x_center,
-		       real* k_y_center,
-		       real* k_z_center, 
 		       int*  k_colloids_list,
 		       int*  k_colloids_start,
 		       int*  k_coll_index,
@@ -468,13 +466,13 @@ struct class_system {
 			       real* k_fz_colloid,
 			       real* k_tx_colloid,
 			       real* k_ty_colloid,
-			       real* k_tz_colloid,			       
+			       real* k_tz_colloid,
+			       real* k_x,
+			       real* k_y,
+			       real* k_z,			       
 			       real* k_fx,
 			       real* k_fy,
 			       real* k_fz,
-			       real* k_x_center,
-			       real* k_y_center,
-			       real* k_z_center,
 			       int*  k_colloids_list,
 			       int*  k_colloids_start,
 			       int*  k_coll_index,
