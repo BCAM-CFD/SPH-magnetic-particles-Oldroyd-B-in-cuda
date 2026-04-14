@@ -1,3 +1,11 @@
+/******************************************************
+This code has been developed by:
+Adolfo Vazquez-Quesada (1) and Jose Manuel Moreno Valderrama (2)
+(1) Department of Fundamental Physics at UNED, Madrid, Spain
+(2) Remedy Entertainment
+email: a.vazquez-quesada@fisfun.uned.es
+********************************************************/
+
 #include <iostream>
 #include "cuda_runtime.h"
 #include "class_system.h"

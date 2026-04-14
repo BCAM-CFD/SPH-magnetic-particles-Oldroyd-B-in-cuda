@@ -1,3 +1,11 @@
+/******************************************************
+This code has been developed by:
+Adolfo Vazquez-Quesada (1) and Jose Manuel Moreno Valderrama (2)
+(1) Department of Fundamental Physics at UNED, Madrid, Spain
+(2) Remedy Entertainment
+email: a.vazquez-quesada@fisfun.uned.es
+********************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -49,7 +57,7 @@ int class_system::read_input(int   N[3],
   
   FILE *file = fopen("input", "r");
   if (!file) {
-    perror("Error al abrir el archivo");
+    perror("Opening file error");                
     return 0;
   }
 
@@ -420,7 +428,7 @@ int class_system::read_input(int   N[3],
       printf("system_read_input error: the number of dimensions of the system is not compatible with the number of dimensions of ext_force\n");
       return 1;
     }
-  if (ext_force_type < 0 || ext_force_type > 2)  {
+  if (ext_force_type < 0 || ext_force_type > 3)  {
     printf("system_read_input error: the option ext_force_type = %d is not available.\n", ext_force_type);
     return 1;
   }
@@ -441,7 +449,7 @@ int class_system::read_input(int   N[3],
 	return 1;	
       }
       if (dim == 3)
-	if (coll_x_data[i][1] < 0 || coll_x_data[i][1] > L[2]) {
+	if (coll_x_data[i][2] < 0 || coll_x_data[i][2] > L[2]) {
 	  printf("System read input error: Colloid is out of the simulation box\n");
 	  return 1;	
 	}	
@@ -478,7 +486,7 @@ int class_system::read_input(int   N[3],
 	  //--- Periodic boundary conditions ---
 	  if (xij > 0.5 * L[0])
 	    xij -= L[0];
-	  if (xij > -0.5 * L[0])
+	  if (xij < -0.5 * L[0])
 	    xij += L[0];
 	  if (wall == 0) {   //If there are not walls	      	    
 	    if (yij > 0.5 * L[1])
@@ -488,7 +496,7 @@ int class_system::read_input(int   N[3],
 	  }
 	  if (zij > 0.5 * L[2])
 	    zij -= L[2];
-	  if (zij > -0.5 * L[2])
+	  if (zij < -0.5 * L[2])
 	    zij += L[2];	  
 	
 	  real rij = sqrt(xij*xij + yij*yij + zij*zij);
