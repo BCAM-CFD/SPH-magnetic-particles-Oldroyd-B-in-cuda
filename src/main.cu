@@ -1,7 +1,8 @@
 /******************************************************
-This code has been developed by Adolfo Vazquez-Quesada,
-from the Department of Fundamental Physics at UNED, in
-Madrid, Spain.
+This code has been developed by:
+Adolfo Vazquez-Quesada (1) and Jose Manuel Moreno Valderrama (2)
+(1) Department of Fundamental Physics at UNED, Madrid, Spain
+(2) Remedy Entertainment
 email: a.vazquez-quesada@fisfun.uned.es
 ********************************************************/
 
@@ -327,8 +328,7 @@ int main() {
 			       k_coll_omegax, k_coll_omegay, k_coll_omegaz,
 			       k_fx_colloid, k_fy_colloid, k_fz_colloid,
 			       k_tx_colloid, k_ty_colloid, k_tz_colloid,
-			       k_x_center, k_y_center, k_z_center, k_colloids_list,
-			       k_colloids_start, k_coll_index,
+			       k_colloids_list, k_colloids_start, k_coll_index,
 			       k_coll_cell_start, k_coll_cell_end,
 			       k_magnetic_mom);
   if (error != 0)
@@ -420,8 +420,7 @@ int main() {
 				 k_coll_omegax, k_coll_omegay, k_coll_omegaz,
 				 k_fx_colloid, k_fy_colloid, k_fz_colloid,
 				 k_tx_colloid, k_ty_colloid, k_tz_colloid,
-				 k_x_center, k_y_center, k_z_center, k_colloids_list,
-				 k_colloids_start, k_coll_index,
+				 k_colloids_list, k_colloids_start, k_coll_index,
 				 k_coll_cell_start, k_coll_cell_end,
 				 k_magnetic_mom);
     end_forces = clock();

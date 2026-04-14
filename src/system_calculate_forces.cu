@@ -1,7 +1,8 @@
 /******************************************************
-This code has been developed by Adolfo Vazquez-Quesada,
-from the Department of Fundamental Physics at UNED, in
-Madrid, Spain.
+This code has been developed by:
+Adolfo Vazquez-Quesada (1) and Jose Manuel Moreno Valderrama (2)
+(1) Department of Fundamental Physics at UNED, Madrid, Spain
+(2) Remedy Entertainment
 email: a.vazquez-quesada@fisfun.uned.es
 ********************************************************/
 
@@ -71,9 +72,6 @@ int class_system::calculate_forces(dim3 numBlocks,
 				   real* k_tx_colloid,
 				   real* k_ty_colloid,
 				   real* k_tz_colloid,
-				   real* k_x_center,
-				   real* k_y_center,
-				   real* k_z_center, 
 				   int*  k_colloids_list,
 				   int*  k_colloids_start,
 				   int*  k_coll_index,
@@ -163,8 +161,7 @@ int class_system::calculate_forces(dim3 numBlocks,
 				     k_coll_x, k_coll_y, k_coll_z,
 				     k_fx_colloid, k_fy_colloid, k_fz_colloid,
 				     k_tx_colloid, k_ty_colloid, k_tz_colloid,
-				     k_fx, k_fy, k_fz,
-				     k_x_center, k_y_center, k_z_center,
+				     k_x, k_y, k_z, k_fx, k_fy, k_fz,
 				     k_colloids_list, k_colloids_start,
 				     k_coll_index, k_coll_cell_start, k_coll_cell_end,
 				     k_magnetic_mom);
