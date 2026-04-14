@@ -1,7 +1,8 @@
 /******************************************************
-This code has been developed by Adolfo Vazquez-Quesada,
-from the Department of Fundamental Physics at UNED, in
-Madrid, Spain.
+This code has been developed by:
+Adolfo Vazquez-Quesada (1) and Jose Manuel Moreno Valderrama (2)
+(1) Department of Fundamental Physics at UNED, Madrid, Spain
+(2) Remedy Entertainment
 email: a.vazquez-quesada@fisfun.uned.es
 ********************************************************/
 
@@ -199,12 +200,15 @@ __global__ void kernel_collect_force_colloids(real* __restrict__ fx_colloid,
 					      real* __restrict__ tx_colloid,
 					      real* __restrict__ ty_colloid,
 					      real* __restrict__ tz_colloid,
+					      real* __restrict__ x,
+					      real* __restrict__ y,
+					      real* __restrict__ z,
 					      real* __restrict__ fx,
 					      real* __restrict__ fy,
 					      real* __restrict__ fz,
-					      real* __restrict__ x_center,
-					      real* __restrict__ y_center,
-					      real* __restrict__ z_center,
+					      real* __restrict__ coll_x,
+					      real* __restrict__ coll_y,
+					      real* __restrict__ coll_z,
 					      int*  __restrict__ colloids_list,
 					      int*  __restrict__ colloids_start);
 __global__ void kernel_ext_force(real* __restrict__ x,

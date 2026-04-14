@@ -1,7 +1,8 @@
 /******************************************************
-This code has been developed by Adolfo Vazquez-Quesada,
-from the Department of Fundamental Physics at UNED, in
-Madrid, Spain.
+This code has been developed by:
+Adolfo Vazquez-Quesada (1) and Jose Manuel Moreno Valderrama (2)
+(1) Department of Fundamental Physics at UNED, Madrid, Spain
+(2) Remedy Entertainment
 email: a.vazquez-quesada@fisfun.uned.es
 ********************************************************/
 
@@ -29,10 +30,10 @@ __global__ void kernel_forces(real* __restrict__ x,
 			      real* __restrict__ press,
 			      real* __restrict__ dens,
 			      real* __restrict__ mass,
-			      int* __restrict__ particle_index,
-			      int* __restrict__ cell_start,
-			      int* __restrict__ cell_end,
-			      int* __restrict__ type,
+			      int*  __restrict__ particle_index,
+			      int*  __restrict__ cell_start,
+			      int*  __restrict__ cell_end,
+			      int*  __restrict__ type,
 			      real* __restrict__ coll_x,
 			      real* __restrict__ coll_y,
 			      real* __restrict__ coll_z,
@@ -153,7 +154,7 @@ __global__ void kernel_forces(real* __restrict__ x,
 	    if (i == j)
 	      continue;
 	    
-	    if (type_i == type[j] && type_i != 0) // Both are not from fluid
+	    if (type_i != 0 && type[j] != 0) // Both are not from fluid	      
 	      continue;	  
 	  
 	    rij[0] = xi - x[j];
@@ -365,7 +366,7 @@ __global__ void kernel_forces(real* __restrict__ x,
 		    vij[1] = -vy[j];		      
 		  }
 		}
-		else {  // ------------- i colloid (type[j] > 2 ------------------ 
+		else {  // ------------- i colloid (type[j] > 2) ------------------ 
 		  int coll_part = type_i - 3;  // Colloidal particle id
 		  // Distance particle-colloid center is calculated
 		  real rj_coll[2];
