@@ -4,6 +4,7 @@ SPH for viscoelstic fluids with wall boundaries and suspensions of spherical mag
 Developed by Adolfo Vázquez-Quesada. 
 
 mail: a.vazquez-quesada@fisfun.uned.es
+
 --------------------------------------------------
 
 - Host variables and functions are declared in class_system.h.
@@ -16,9 +17,8 @@ mail: a.vazquez-quesada@fisfun.uned.es
 
 - main.cu is the main file of the code.
 
-*******************************
-      Compilation 
-*******************************
+## Compilation 
+
 The compilation is done with the makefile file. 
 To compile, just write the following command in the command line:
 
@@ -27,40 +27,51 @@ make
 If you want to clean everthing before compiling again, just do
 
 make clean
-*******************************
-         input variables 
-*******************************
-N       -> Number of particles in each direction ( in a rectangular grid)
 
-L       -> Box length in each direction.
+## Running a simulation
 
-dim     -> Number of dimensions
+You need to have the following files in the same directory (with the exact names shown below):
 
-dt      -> Time steps
+- **SPH_program**: the executable.
+- **input**: a file containing the program inputs.
 
-t0      -> Initial time
+To run the program, execute:
 
-Nsteps  -> Number of steps
+./SPH_program
 
-overlap -> rcut / dx   (where dx = L/N)
+## Input variables 
 
-rho     -> fluid density
+**N**       -> Number of particles in each direction ( in a rectangular grid)
 
-c       -> Speed of sound
+**L**       -> Box length in each direction.
 
-P0      -> parameter of the equation of state
+**dim**     -> Number of dimensions
 
-eta     -> shear viscosity
+**dt**      -> Time steps
 
-zeta    -> bulk viscosity
+**t0**      -> Initial time
 
-np      -> number of polymers per particle
+**Nsteps**  -> Number of steps
 
-kT      -> Boltzmann constant multiplied by temperature
+**overlap** -> rcut / dx   (where dx = L/N)
 
-tau     -> Relaxation time of the Oldroyd-B model
+**rho**     -> fluid density
 
-ext_force_type -> Type of external force:
+**c**       -> Speed of sound
+
+**P0**      -> parameter of the equation of state
+
+**eta**     -> shear viscosity
+
+**zeta**    -> bulk viscosity
+
+**np**      -> number of polymers per particle
+
+**kT**      -> Boltzmann constant multiplied by temperature
+
+**tau**     -> Relaxation time of the Oldroyd-B model
+
+**ext_force_type** -> Type of external force:
 
 	       0: No external force
 
@@ -70,61 +81,60 @@ ext_force_type -> Type of external force:
 
 		   3: force to simulate inverse Poiseuille flow
 		   
-ext_force -> External force vector
+**ext_force** -> External force vector
 
-freq_micro    -> Frequency to write micro file.
+**freq_micro**    -> Frequency to write micro file.
 
-freq_macro    -> Frequency to write macro file.
+**freq_macro**    -> Frequency to write macro file.
 
-freq_walls    -> Frequency to write walls file.
+**freq_walls**    -> Frequency to write walls file.
 
-freq_colloids -> Frequency to write colloids file.
+**freq_colloids** -> Frequency to write colloids file.
 
-wall -> walls are normal to the y-direction.
+**wall** -> walls are normal to the y-direction.
 
 	    0: no walls
 		
      	1: walls
 		
-Vwall_bottom -> x-velocity of the bottom wall.
+**Vwall_bottom** -> x-velocity of the bottom wall.
 
-Vwall_top    -> x-velocity of the top wall.
+**Vwall_top**    -> x-velocity of the top wall.
 
-N_colloids -> Number of colloidal particles.
+**N_colloids** -> Number of colloidal particles.
 
-coll_R     -> Colloids radius.
+**coll_R**     -> Colloids radius.
 
-coll_rho   -> Colloids density.
+**coll_rho**   -> Colloids density.
 
-coll_move  -> 
+**coll_move**  -> 
  
           0: colloids are moving.
 		  
 	      1: colloids are not moving.
 		  
-coll_x     -> Position of one colloid. Put as many coll_x as needed.
+**coll_x**     -> Position of one colloid. Put as many coll_x as needed.
 
-coll_repulsion_cuton -> Cut on of the repulsion force between colloids.
+**coll_repulsion_cuton** -> Cut on of the repulsion force between colloids.
 
-F0_repulsion         -> Magnitude of the repulsion force.
+**F0_repulsion**         -> Magnitude of the repulsion force.
 
-tau_repulsion        -> Tau parameter of the repulsion force (related to the cut off radius of the repulsion force).
+**tau_repulsion**        -> Tau parameter of the repulsion force (related to the cut off radius of the repulsion force).
 
-cutoff_magnetic -> Cut off radius of the magnetic force.
+**cutoff_magnetic** -> Cut off radius of the magnetic force.
 
-F0_magnetic     -> F0 parameter of the magnetic force.
+**F0_magnetic**     -> F0 parameter of the magnetic force.
 
-omega_magnetic  -> Angular velocity of the rotation of the magnetic field.
+**omega_magnetic**  -> Angular velocity of the rotation of the magnetic field.
 
-new_sim -> 
+**new_sim** -> 
 
        0: new simulation.
 	   
 	   1: existing simulation
 
-************************************
-Key of the output files
-************************************
+## Key of the output files
+
 micro: 
 
        -- 2D --
@@ -249,9 +259,8 @@ macro:
 	   
        2 -> Total kinetic energy
 
-*****************************
-To restart a simulation
-*****************************
+## To restart a simulation
+
 1.- Use the same input file of the initial simulation (or some variation of it).
 
 2.- In the input file: new_sim 1
