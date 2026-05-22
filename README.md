@@ -1,7 +1,7 @@
 # SPH magnetic particles Oldroyd-B in CUDA
 SPH for viscoelstic fluids with wall boundaries and suspensions of spherical magnetic particles, implemented in CUDA.
 
-Developed by Adolfo Vázquez-Quesada. 
+Developed by Adolfo Vázquez-Quesada and José Manuel Moreno Valderrama.
 
 mail: a.vazquez-quesada@fisfun.uned.es
 
