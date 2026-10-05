@@ -178,7 +178,7 @@ __global__ void kernel_magnetic_force_colloids(real* __restrict__ coll_x,
 
 	      if (rijsq <= r0_magnet_sq) {
 		real eij[3];
-		real r              = sqrt(rijsq)/coll_R;
+		real r              = sqrt(rijsq);
 		eij[0]              = rij[0]/r;
 		eij[1]              = rij[1]/r;
 		eij[2]              = rij[2]/r;

@@ -8,9 +8,7 @@ email: a.vazquez-quesada@fisfun.uned.es
 
 #include "kernel_functions.h"
 
-#include <stdio.h>
-
-// Function to initialize cell colloids. This is important if there could be 0 or 1 particles
+// Function to initialize cell colloids. This is important if there could be 0 particles
 // in one given cell.
 __global__ void kernel_initialize_cell_colloids(int* __restrict__ coll_cell_start,
 						int* __restrict__ coll_cell_end) {
