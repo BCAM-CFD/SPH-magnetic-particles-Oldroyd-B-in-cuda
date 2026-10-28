@@ -44,7 +44,7 @@ int class_system::neighbours_search(dim3  numBlocks,
     printf("Error in kernel_cell_list: %s\n", cudaGetErrorString(cuda_err));
     return 1;
   }      
-  cudaDeviceSynchronize();  // We require the kernel to end to continue   
+  // cudaDeviceSynchronize();  // We require the kernel to end to continue   
 
   // particle_index and particle_cell are sorted according to particle_cell
   // If we have
@@ -67,7 +67,7 @@ int class_system::neighbours_search(dim3  numBlocks,
     printf("Error in kernel_cell_ranges: %s\n", cudaGetErrorString(cuda_err));
     return 1;
   }      
-  cudaDeviceSynchronize();  // We require the kernel to end to continue
+  // cudaDeviceSynchronize();  // We require the kernel to end to continue
 
   //------------- Colloidal particles ----------------------
   if (N_colloids >= 2) {
@@ -79,7 +79,7 @@ int class_system::neighbours_search(dim3  numBlocks,
       printf("Error in kernel_cell_colloids_list: %s\n", cudaGetErrorString(cuda_err));
       return 1;
     }      
-    cudaDeviceSynchronize();  // We require the kernel to end to continue
+    // cudaDeviceSynchronize();  // We require the kernel to end to continue
 
     // coll_index and coll_cell are sorted according to coll_cell
     // If we have
@@ -105,7 +105,7 @@ int class_system::neighbours_search(dim3  numBlocks,
       printf("Error in kernel_colloids_cell_ranges: %s\n", cudaGetErrorString(cuda_err));
       return 1;
     }      
-    cudaDeviceSynchronize();  // We require the kernel to end to continue    
+    // cudaDeviceSynchronize();  // We require the kernel to end to continue    
   }
 
   return 0;

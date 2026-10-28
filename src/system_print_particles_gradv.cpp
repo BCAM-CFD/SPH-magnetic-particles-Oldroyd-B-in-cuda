@@ -5,7 +5,6 @@ Adolfo Vazquez-Quesada (1) and Jose Manuel Moreno Valderrama (2)
 (2) Remedy Entertainment
 email: a.vazquez-quesada@fisfun.uned.es
 ********************************************************/
-
 #include <iostream>
 #include "cuda_runtime.h"
 #include "class_system.h"

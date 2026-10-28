@@ -42,7 +42,8 @@ struct class_system {
   real nkT;  //np * k * T  (Oldroyd-B model)
   real tau;  // relaxation time of the Oldroyd-B model    
 
-  real L[3];        // Box size
+  real  L[3];        // Box size
+  float Lf[3];       // Box size in float  
 
   int dim;          // Number of dimensions
 
@@ -109,10 +110,11 @@ struct class_system {
   real  r0_magnet;       // Magnetic force cutoff
   real  r0_magnet_sq;    // (r0_magnet)^2  
   real  F0_magnet;       // Magnetic force magnitude
-  real  omega_magnet;    // Angular velocity of the orientation of the magnetic force  
+  real  omega_magnet;    // Angular velocity of the orientation of the magnetic force    
 
   real rcut;        // cutoff radius
   real rcutsq;      // Square cutoff radius
+  float rcutsq_f;   // A bit greater than square cutoff radius in float
   real rcut_inv;    // Inverse cutoff radius  
   real cw;          // Normalization constant of W
   real c_gradw;     // Constant of gradW
@@ -146,8 +148,8 @@ struct class_system {
   int read_input(int   N[3],
 		 real  L[3],
 		 int&  dim,
-		 real& delta_t,
-		 real& t_ini,		 
+		 real& dt,
+		 real& t_ini,			     
 		 int&  Nsteps,
 		 real& overlap,
 		 real& rho,
@@ -157,19 +159,19 @@ struct class_system {
 		 real& zeta,
 		 real& np,
 		 real& kT,
-		 real& elast_time,		 
+		 real& elast_time,			     
 		 int&  ext_force_type,
 		 real  ext_force[3],
 		 int&  freq_micro,
 		 int&  freq_macro,
 		 int&  freq_walls,
-		 int&  freq_colloid,
+		 int&  freq_colloids,
 		 int&  wall,
 		 real& Vwall_top,
 		 real& Vwall_bottom,
 		 int&  N_coll,
 		 real& coll_radius,
-		 real& col_density,
+		 real& coll_density,
 		 real  coll_x_data[MAX_COLLOIDS][MAX_VALUES_PER_COLLOID],
 		 int&  coll_move,
 		 real& coll_repulsion_cuton,
@@ -177,7 +179,7 @@ struct class_system {
 		 real& tau_repulsion,
 		 real& cutoff_magnetic,
 		 real& F0_magnetic,
-		 real& omega_magnetic,		 
+		 real& omega_magnetic,
 		 int&  new_sim);
   void initialize_pointers();
   void constructor(int  Nxyz[3],
@@ -278,6 +280,7 @@ struct class_system {
 			      real** k_fy,
 			      real** k_fz,
 			      real** k_dens,
+			      real** k_inv_dens,			      
 			      real** k_press,
 			      int**  k_particle_cell,
 			      int**  k_particle_index,
@@ -285,6 +288,12 @@ struct class_system {
 			      int**  k_cell_end,
 			      real** k_kin_energy,
 			      int**  k_type,
+			      real** k_Pixx_over_dens_sq,
+			      real** k_Pixy_over_dens_sq,
+			      real** k_Piyy_over_dens_sq,
+			      real** k_Pixz_over_dens_sq,
+			      real** k_Piyz_over_dens_sq,
+			      real** k_Pizz_over_dens_sq,			      
 			      real** k_cxx,
 			      real** k_cxy,
 			      real** k_cyy,
@@ -340,7 +349,7 @@ struct class_system {
 			      int**  k_coll_index,
 			      int**  k_coll_cell_start,
 			      int**  k_coll_cell_end,
-			      real** k_magnetic_mom);
+			      float4** k_posf);
   int neighbours_search(dim3  numBlocks,
 			dim3  threadsPerBlock,
 			real* k_x,
@@ -363,14 +372,29 @@ struct class_system {
 			real* k_y,
 			real* k_z,
 			real* k_dens,
+			real* k_inv_dens,			
 			int*  k_particle_index,
 			int*  k_cell_start,
-			int*  k_cell_end);
+			int*  k_cell_end,
+			float4* k_posf);
   int calculate_pressure(dim3 numBlocks,
 			 dim3  threadsPerBlock,
 			 real* k_press,
 			 real* k_dens,
-			 real* k_mass);
+			 real* k_mass,
+			 real* k_inv_dens,
+			 real* k_cxx,
+			 real* k_cxy,
+			 real* k_cyy,
+			 real* k_cxz,
+			 real* k_cyz,
+			 real* k_czz,				     			 
+			 real* k_Pixx_over_dens_sq,
+			 real* k_Pixy_over_dens_sq,
+			 real* k_Piyy_over_dens_sq,
+			 real* k_Pixz_over_dens_sq,
+			 real* k_Piyz_over_dens_sq,
+			 real* k_Pizz_over_dens_sq);
   int calculate_forces(dim3  numBlocks,
 		       dim3  threadsPerBlock,
 		       real* k_x,
@@ -405,16 +429,21 @@ struct class_system {
 		       real* k_gradvzz,				   		       
 		       real* k_press,
 		       real* k_dens,
+		       real* k_inv_dens,		       
 		       real* k_mass,				    
 		       int*  k_particle_index,
 		       int*  k_cell_start,
 		       int*  k_cell_end,
 		       int*  k_type,
+		       real* k_Pixx_over_dens_sq,
+		       real* k_Pixy_over_dens_sq,
+		       real* k_Piyy_over_dens_sq,
+		       real* k_Pixz_over_dens_sq,
+		       real* k_Piyz_over_dens_sq,
+		       real* k_Pizz_over_dens_sq,
 		       real* k_fx_wall,
 		       real* k_fy_wall,
 		       real* k_fz_wall,
-		       int*  k_walls_list,
-		       int*  k_walls_start,		       
 		       real* k_coll_x,
 		       real* k_coll_y,
 		       real* k_coll_z,
@@ -435,7 +464,8 @@ struct class_system {
 		       int*  k_coll_index,
 		       int*  k_coll_cell_start,
 		       int*  k_coll_cell_end,
-		       real* k_magnetic_mom);
+		       float4* k_posf,
+		       const real magnetic_mom[3]);
   int calculate_external_forces(dim3  numBlocks,
 				dim3  threadsPerBlock,
 				real* k_x,
@@ -478,7 +508,7 @@ struct class_system {
 			       int*  k_coll_index,
 			       int*  k_coll_cell_start,
 			       int*  k_coll_cell_end,
-			       real* k_magnetic_mom);  
+			       const real magnetic_mom[3]);  
   int V_Verlet_step1(dim3 numBlocks,
 		     dim3 threadsPerBlock,
 		     real* k_x,
@@ -574,7 +604,7 @@ struct class_system {
  			int*  k_type,
 			real* k_coll_vx,
 			real* k_coll_vy,
-			real* k_coll_vz,				    			
+			real* k_coll_vz,
 			real* k_energy,
 			int step);
   void print_output(dim3 numBlocks,
@@ -589,7 +619,7 @@ struct class_system {
 		    real* k_fy,
 		    real* k_fz,		    		    
 		    real* k_mass,
-		    int*  k_type,
+		    int*  k_type, 
 		    real* k_dens,
 		    real* k_press,
 		    real* k_cxx,
@@ -601,6 +631,8 @@ struct class_system {
 		    real* k_fx_wall,
 		    real* k_fy_wall,
 		    real* k_fz_wall,
+		    int*  k_walls_list,
+		    int*  k_walls_start,		    
 		    real* k_coll_x,
 		    real* k_coll_y,
 		    real* k_coll_z,
@@ -622,36 +654,5 @@ struct class_system {
 		    int   freq_colloids,
 		    int   freq_macro,				
 		    int   step);
-  int calculate_vel_gradient(dim3 numBlocks,
-			     dim3 threadsPerBlock,
-			     real* k_x,
-			     real* k_y,
-			     real* k_z,
-			     real* k_vx,
-			     real* k_vy,
-			     real* k_vz,
-			     real* k_gradvxx,
-			     real* k_gradvxy,
-			     real* k_gradvxz,
-			     real* k_gradvyx,
-			     real* k_gradvyy,
-			     real* k_gradvyz,
-			     real* k_gradvzx,
-			     real* k_gradvzy,
-			     real* k_gradvzz,
-			     real* k_dens,
-			     int*  k_particle_index,
-			     int*  k_cell_start,
-			     int*  k_cell_end,
-			     int*  k_type,
-			     real* k_coll_x,
-			     real* k_coll_y,
-			     real* k_coll_z,
-			     real* k_coll_vx,
-			     real* k_coll_vy,
-			     real* k_coll_vz,
-			     real* k_coll_omegax,
-			     real* k_coll_omegay,
-			     real* k_coll_omegaz);  
   void destructor();
 };

@@ -25,7 +25,7 @@ int class_system::calculate_force_colloids(dim3  numBlocks,
 					   real* k_tz_colloid,
 					   real* k_x,
 					   real* k_y,
-					   real* k_z, 
+					   real* k_z,					   
 					   real* k_fx,
 					   real* k_fy,
 					   real* k_fz,
@@ -34,15 +34,9 @@ int class_system::calculate_force_colloids(dim3  numBlocks,
 					   int*  k_coll_index,
 					   int*  k_coll_cell_start,
 					   int*  k_coll_cell_end,
-					   real* k_magnetic_mom)  {
+					   const real magnetic_mom[3])  {
 
   cudaError_t cuda_err;
-
-  //---- Colloidal forces and torques are set to zero ----
-  kernel_colloid_forces_to_zero<<<numBlocks, threadsPerBlock>>>(k_fx_colloid, k_fy_colloid,
-								k_fz_colloid, k_tx_colloid,
-								k_ty_colloid, k_tz_colloid);
-  cudaDeviceSynchronize();  // We require the kernel to end to continue  
 
   //---- Forces and torques of the computational particles are collected ----
   kernel_collect_force_colloids<<<numBlocks, threadsPerBlock>>>(k_fx_colloid, k_fy_colloid,
@@ -51,7 +45,8 @@ int class_system::calculate_force_colloids(dim3  numBlocks,
 								k_tz_colloid,
 								k_x, k_y, k_z,
 								k_fx, k_fy, k_fz,
-								k_coll_x, k_coll_y, k_coll_z,
+								k_coll_x, k_coll_y,
+								k_coll_z,
 								k_colloids_list,
 								k_colloids_start);
   cuda_err = cudaGetLastError();
@@ -59,9 +54,12 @@ int class_system::calculate_force_colloids(dim3  numBlocks,
     printf("Error in kernel_force_colloids: %s\n", cudaGetErrorString(cuda_err));
     return 1;
   }  	
-  cudaDeviceSynchronize();  // We require the kernel to end to continue
+  // cudaDeviceSynchronize();  // We require the kernel to end to continue
 
   //---- Repulsion forces are calculated ----
+  if (wall)
+    kernel_repulsion_colloids_walls<<<numBlocks, threadsPerBlock>>>(k_coll_y,
+								    k_fy_colloid);  
   if (N_colloids >= 2)  {
     kernel_repulsion_force_colloids<<<numBlocks, threadsPerBlock>>>(k_coll_x, k_coll_y,
 								    k_coll_z, k_fx_colloid,
@@ -75,23 +73,30 @@ int class_system::calculate_force_colloids(dim3  numBlocks,
       printf("Error in kernel_repulsion_force_colloids: %s\n", cudaGetErrorString(cuda_err));
       return 1;
     }  	
-    cudaDeviceSynchronize();  // We require the kernel to end to continue
+    // cudaDeviceSynchronize();  // We require the kernel to end to continue
 
-    //---- Magnetic forces are calculated ----
-    kernel_magnetic_force_colloids<<<numBlocks, threadsPerBlock>>>(k_coll_x, k_coll_y,
-								   k_coll_z, k_fx_colloid,
-								   k_fy_colloid, k_fz_colloid,
-								   k_coll_index,
-								   k_coll_cell_start,
-								   k_coll_cell_end,
-								   k_magnetic_mom);
-    cuda_err = cudaGetLastError();
-    if (cuda_err != cudaSuccess){
-      printf("Error in kernel_magnetic_force_colloids: %s\n", cudaGetErrorString(cuda_err));
-      return 1;
-    }  	
-    cudaDeviceSynchronize();  // We require the kernel to end to continue
+  //---- Magnetic forces are calculated ----
+  kernel_magnetic_force_colloids<<<numBlocks, threadsPerBlock>>>(k_coll_x, k_coll_y,
+								 k_coll_z, k_fx_colloid,
+								 k_fy_colloid,
+								 k_fz_colloid,
+								 k_coll_index,
+								 k_coll_cell_start,
+								 k_coll_cell_end,
+								 magnetic_mom[0],
+								 magnetic_mom[1],
+								 magnetic_mom[2]);
+  cuda_err = cudaGetLastError();
+  if (cuda_err != cudaSuccess){
+    printf("Error in kernel_magnetic_force_colloids: %s\n", cudaGetErrorString(cuda_err));
+    return 1;
+  }  	
+  // cudaDeviceSynchronize();  // We require the kernel to end to continue
+    
   }
+
+
+
   
   return 0;
 }

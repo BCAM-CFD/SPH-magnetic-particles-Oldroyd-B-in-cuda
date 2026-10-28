@@ -5,7 +5,6 @@ Adolfo Vazquez-Quesada (1) and Jose Manuel Moreno Valderrama (2)
 (2) Remedy Entertainment
 email: a.vazquez-quesada@fisfun.uned.es
 ********************************************************/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,7 +18,7 @@ int class_system::read_input(int   N[3],
 			     real  L[3],
 			     int&  dim,
 			     real& dt,
-			     real& t_ini,
+			     real& t_ini,			     
 			     int&  Nsteps,
 			     real& overlap,
 			     real& rho,
@@ -49,7 +48,7 @@ int class_system::read_input(int   N[3],
 			     real& tau_repulsion,
 			     real& cutoff_magnetic,
 			     real& F0_magnetic,
-			     real& omega_magnetic,			     
+			     real& omega_magnetic,
 			     int&  new_sim) {
 
   // Array to store initial positions of the colloids	   
@@ -57,7 +56,7 @@ int class_system::read_input(int   N[3],
   
   FILE *file = fopen("input", "r");
   if (!file) {
-    perror("Opening file error");                
+    perror("Opening file error");    
     return 0;
   }
 
@@ -67,7 +66,7 @@ int class_system::read_input(int   N[3],
   int L_read               = 1;
   int dim_read             = 1;
   int dt_read              = 1;
-  int t_ini_read           = 1;  
+  int t_ini_read           = 1;    
   int Nsteps_read          = 1;
   int overlap_read         = 1;
   int rho_read             = 1;
@@ -96,7 +95,7 @@ int class_system::read_input(int   N[3],
   int tau_repulsion_read   = 1;
   int cutoff_magnetic_read = 1;
   int F0_magnetic_read     = 1;
-  int omega_magnetic_read  = 1;    
+  int omega_magnetic_read  = 1;      
   int new_sim_read         = 1;    
     
   while (fgets(line, sizeof(line), file)) {
@@ -119,10 +118,10 @@ int class_system::read_input(int   N[3],
       dim_N                = 3;
       N_read               = 0;
     } else if (strcmp(var, "N") == 0 && count == 3) {
-      N[0]               = (int)val1;
-      N[1]               = (int)val2;
-      dim_N              = 2;
-      N_read             = 0;
+	N[0]               = (int)val1;
+	N[1]               = (int)val2;
+	dim_N              = 2;
+	N_read             = 0;
     } else if (strcmp(var, "L") == 0 && count == 4) {
       L[0]                 = val1;
       L[1]                 = val2;
@@ -137,12 +136,12 @@ int class_system::read_input(int   N[3],
     } else if (strcmp(var, "dim") == 0 && count >= 2) {
       dim                  = (int)val1;
       dim_read             = 0;
-    } else if (strcmp(var, "dt") == 0 && count >= 2) {
+    }  else if (strcmp(var, "dt") == 0 && count >= 2) {
       dt                   = val1;
       dt_read              = 0;
     } else if (strcmp(var, "t0") == 0 && count >= 2) {
       t_ini                = val1;
-      t_ini_read           = 0;
+      t_ini_read           = 0;      
     } else if (strcmp(var, "Nsteps") == 0 && count >= 2) {
       Nsteps               = (int)val1;
       Nsteps_read          = 0;
@@ -237,7 +236,7 @@ int class_system::read_input(int   N[3],
       F0_magnetic_read     = 0;
     } else if (strcmp(var, "omega_magnetic") == 0 && count >= 2) {
       omega_magnetic       = val1;
-      omega_magnetic_read  = 0;                                                
+      omega_magnetic_read  = 0;                                                      
     } else if (strcmp(var, "new_sim") == 0 && count >= 2) {
       new_sim              = val1;
       new_sim_read         = 0;            
@@ -288,7 +287,7 @@ int class_system::read_input(int   N[3],
   if (t_ini_read == 1)  {
     printf("system_read_input error: t0 was not read\n");
     return 1;
-  }  
+  }    
   if (Nsteps_read == 1)  {
     printf("system_read_input error: Nsteps was not read\n");
     return 1;
@@ -404,7 +403,7 @@ int class_system::read_input(int   N[3],
   if (omega_magnetic_read == 1)  {
     printf("system_read_input error: omega_magnetic was not read\n");
     return 1;
-  }              
+  }            
   if (new_sim_read == 1)  {
     printf("system_read_input error: new_sim was not read\n");
     return 1;

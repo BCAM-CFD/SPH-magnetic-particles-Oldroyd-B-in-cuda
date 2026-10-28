@@ -9,6 +9,7 @@ email: a.vazquez-quesada@fisfun.uned.es
 #include "class_system.h"
 #include "config.h"
 #include <math.h>
+#include <cfloat>   // FLT_EPSILON
 
 #include <stdio.h>
 
@@ -39,7 +40,7 @@ int class_system::initialize(int  Nxyz[3],
 			     real tau_repulsion,
 			     real cutoff_magnetic,
 			     real F0_magnetic,
-			     real omega_magnetic,			     
+			     real omega_magnetic,
 			     int  new_sim) {
   int error_out;
   error_out = 0;
@@ -48,6 +49,9 @@ int class_system::initialize(int  Nxyz[3],
   this->L[0] = L[0];
   this->L[1] = L[1];
   this->L[2] = L[2];
+  this->Lf[0] = (float) L[0];
+  this->Lf[1] = (float) L[1];
+  this->Lf[2] = (float) L[2];  
   this->wall = wall;
   this->V_top = Vwall_top;
   this->V_bottom = Vwall_bottom;
@@ -101,8 +105,14 @@ int class_system::initialize(int  Nxyz[3],
     b         = 4.0 * (zeta + eta/3.0);
   }
 
+  // We calculate a value a bit higher than rcutsq, in float (to accelerate neighbour comparisons)
+  // (error transforming a coordinate from double to float scales as the coordinate)
+  double Lmax        = fmax(fmax(L[0], L[1]), L[2]) + wall_width;
+  double rcut_filter = sqrt(rcutsq) * (1.0 + 1.0e-3) + 16.0 * Lmax * FLT_EPSILON;
+  this->rcutsq_f     = (float) (rcut_filter * rcut_filter);  
+  
   // About Morris boundary conditions
-  // In Morris 1997 beta_max is 1.5
+  // In Morris 1997 beta_max is 1.5  
   this->beta_max = 1.5;
 
   // Neighbour cells
@@ -193,7 +203,7 @@ int class_system::initialize(int  Nxyz[3],
       if (dim == 3){
 	this->coll_omegax[i] = 0.0;
 	this->coll_omegay[i] = 0.0;
-      }	
+      }	      
       this->coll_theta[i]    = 0.0;
       this->coll_quat0[i]    = 1.0;
       this->coll_quatx[i]    = 0.0;
@@ -226,7 +236,7 @@ int class_system::initialize(int  Nxyz[3],
       rcutoff_coll    = rcutoff_coll_rep;
     else
       rcutoff_coll = r0_magnet;    
-    rcutoff_coll_sq       = rcutoff_coll * rcutoff_coll;
+    rcutoff_coll_sq       = rcutoff_coll * rcutoff_coll;  
     Ncells_colloids[0]    = (int)(L[0]/rcutoff_coll);
     cell_colloids_size[0] = L[0] / Ncells_colloids[0];  
     Ncells_colloids[1]    = (int)(L[1]/rcutoff_coll);
@@ -243,26 +253,29 @@ int class_system::initialize(int  Nxyz[3],
     if (Ncells_colloids[0] < 3) {
       printf("System initialize error: neighbour colloids cells are too big\n");
       printf("Ncells_colloids[0] = %d\n", Ncells_colloids[0]);
+      printf("Maybe tau_repulsion is too small? rcutoff_coll_rep = 5.0*R/tau_rep\n");      
       error_out = 1;
       return 1;
     }
     if (Ncells_colloids[1] < 3) {
       printf("System initialize error: neighbour colloids cells are too big\n");
-      printf("Ncells_colloids[1] = %d\n", Ncells_colloids[1]);    
+      printf("Ncells_colloids[1] = %d\n", Ncells_colloids[1]);
+      printf("Maybe tau_repulsion is too small? rcutoff_coll_rep = 5.0*R/tau_rep\n");      
       error_out = 1;
       return 1;
     }
     if (dim == 3)
       if (Ncells_colloids[2] < 3) {
 	printf("System initialize error: neighbour colloids cells are too big\n");
-	printf("Ncells_colloids[2] = %d\n", Ncells_colloids[2]);      
+	printf("Ncells_colloids[2] = %d\n", Ncells_colloids[2]);
+	printf("Maybe tau_repulsion is too small? rcutoff_coll_rep = 5.0*R/tau_rep\n");	
 	error_out = 1;
       return 1;
       }
   }
 
   //--- Computational particles are initialized ---
-  if (new_sim == 0) {
+  if (new_sim == 1) {
     error_out = this->initialize_particles_new_sim(Nxyz, dx);
     if (error_out != 0)
       return 1;

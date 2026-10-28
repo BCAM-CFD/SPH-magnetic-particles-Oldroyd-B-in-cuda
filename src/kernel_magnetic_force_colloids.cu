@@ -21,7 +21,9 @@ __global__ void kernel_magnetic_force_colloids(real* __restrict__ coll_x,
 					       int*  __restrict__ coll_index,
 					       int*  __restrict__ coll_cell_start,
 					       int*  __restrict__ coll_cell_end,
-					       real* __restrict__ magnetic_mom) {
+					       real mx,
+					       real my,
+					       real mz) {
   int i = threadIdx.x + blockIdx.x * blockDim.x;
   if (i >= N_colloids) return;
 
@@ -103,15 +105,16 @@ __global__ void kernel_magnetic_force_colloids(real* __restrict__ coll_x,
 	      real r              = sqrt(rijsq);
 	      eij[0]              = rij[0]/r;
 	      eij[1]              = rij[1]/r;
-	      real m_dot_eij = magnetic_mom[0] * eij[0] + magnetic_mom[1] * eij[1];
+	      real m_dot_eij = mx * eij[0] + my * eij[1];
 	      real m_dot_eij_sq = m_dot_eij * m_dot_eij;
 	      real F0_over_r4 = F0_magnet/(rijsq * rijsq);
 	      fx_colloid[i] = fx_colloid[i] +
-		F0_over_r4 * (2.0 * m_dot_eij * magnetic_mom[0] -
+		F0_over_r4 * (2.0 * m_dot_eij * mx -
 			      (5.0 * m_dot_eij_sq - 1.0) * eij[0]);
 	      fy_colloid[i] = fy_colloid[i] +
-		F0_over_r4 * (2.0 * m_dot_eij * magnetic_mom[1] -
-			      (5.0 * m_dot_eij_sq - 1.0) * eij[1]);			       
+		F0_over_r4 * (2.0 * m_dot_eij * my -
+			      (5.0 * m_dot_eij_sq - 1.0) * eij[1]);
+	      
 	    }
 	  }
       }
@@ -182,18 +185,17 @@ __global__ void kernel_magnetic_force_colloids(real* __restrict__ coll_x,
 		eij[0]              = rij[0]/r;
 		eij[1]              = rij[1]/r;
 		eij[2]              = rij[2]/r;
-		real m_dot_eij = magnetic_mom[0] * eij[0] + magnetic_mom[1] * eij[1] +
-		  magnetic_mom[2] * eij[2];
+		real m_dot_eij = mx * eij[0] + my * eij[1] + mz * eij[2];
 		real m_dot_eij_sq = m_dot_eij * m_dot_eij;
 		real F0_over_r4 = F0_magnet/(rijsq * rijsq);
 		fx_colloid[i] = fx_colloid[i] +
-		  F0_over_r4 * (2.0 * m_dot_eij * magnetic_mom[0] -
+		  F0_over_r4 * (2.0 * m_dot_eij * mx -
 				(5.0 * m_dot_eij_sq - 1.0) * eij[0]);
 		fy_colloid[i] = fy_colloid[i] +
-		  F0_over_r4 * (2.0 * m_dot_eij * magnetic_mom[1] -
+		  F0_over_r4 * (2.0 * m_dot_eij * my -
 				(5.0 * m_dot_eij_sq - 1.0) * eij[1]);
 		fz_colloid[i] = fz_colloid[i] +
-		  F0_over_r4 * (2.0 * m_dot_eij * magnetic_mom[2] -
+		  F0_over_r4 * (2.0 * m_dot_eij * mz -
 				(5.0 * m_dot_eij_sq - 1.0) * eij[2]);
 	      }
 	    }

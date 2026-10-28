@@ -16,33 +16,42 @@ void class_system::print_walls(real* k_fx_wall,
 			       real* k_fz_wall,
 			       int step) {
 
-  char filename[50];
-  sprintf(filename, "walls-%d.dat", step);
-  FILE* file = fopen(filename, "w");
-  if (!file) {
-    printf("System print walls error: Error opening the file %s\n", filename);
-    return;
-  }
-  
   cudaMemcpy(this->fx_wall, k_fx_wall, Nwalls * sizeof(real), cudaMemcpyDeviceToHost);
   cudaMemcpy(this->fy_wall, k_fy_wall, Nwalls * sizeof(real), cudaMemcpyDeviceToHost);
   if (dim == 3)
-    cudaMemcpy(this->fz_wall, k_fz_wall, Nwalls * sizeof(real), cudaMemcpyDeviceToHost);
+    cudaMemcpy(this->fz_wall, k_fz_wall, Nwalls * sizeof(real), cudaMemcpyDeviceToHost);  
+
+  //-- The file is opened --
+  char filename[50];
+  sprintf(filename, "walls.dat");
+  FILE* file;
+  if (step == 0)
+    file = fopen(filename, "w");
+  else
+    file = fopen(filename, "a");
+  if (!file)
+    {
+      printf("System print walls error: Error opening the file %s\n", filename);
+      return;
+    }
 
   if (dim == 2)
-    for (int i = 0; i < Nwalls; ++i)
-      fprintf(file, "%d " REAL_FMT " " REAL_FMT "\n",
-	      i,
-	      this->fx_wall[i],
-	      this->fy_wall[i]);
+    fprintf(file, "%d " REAL_FMT " " REAL_FMT " " REAL_FMT  " " REAL_FMT "\n",
+	    step,
+	    fx_wall[0],
+	    fy_wall[0],
+	    fx_wall[1],
+	    fy_wall[1]);
   else //--- dim == 3  ---
-    for (int i = 0; i < Nwalls; ++i)
-      fprintf(file, "%d " REAL_FMT " " REAL_FMT " " REAL_FMT "\n",
-	      i,
-	      this->fx_wall[i],
-	      this->fy_wall[i],
-	      this->fz_wall[i]);    
+    fprintf(file, "%d " REAL_FMT " " REAL_FMT " " REAL_FMT  " " REAL_FMT " " REAL_FMT " " REAL_FMT "\n",
+	    step,
+	    fx_wall[0],
+	    fy_wall[0],
+	    fz_wall[0],
+	    fx_wall[1],
+	    fy_wall[1],
+	    fz_wall[1]);    
   fclose(file);
 
-  printf("Walls file written. Time step %d\n", step);
+  //  printf("Walls file written. Time step %d\n", step);
 }

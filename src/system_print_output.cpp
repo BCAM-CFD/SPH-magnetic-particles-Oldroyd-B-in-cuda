@@ -5,7 +5,6 @@ Adolfo Vazquez-Quesada (1) and Jose Manuel Moreno Valderrama (2)
 (2) Remedy Entertainment
 email: a.vazquez-quesada@fisfun.uned.es
 ********************************************************/
-
 #include <iostream>
 #include "cuda_runtime.h"
 #include "class_system.h"
@@ -23,7 +22,7 @@ void class_system::print_output(dim3 numBlocks,
 				real* k_fy,
 				real* k_fz,
 				real* k_mass,
-				int*  k_type,				
+				int*  k_type,
 				real* k_dens,
 				real* k_press,
 				real* k_cxx,
@@ -35,6 +34,8 @@ void class_system::print_output(dim3 numBlocks,
 				real* k_fx_wall,
 				real* k_fy_wall,
 				real* k_fz_wall,
+				int*  k_walls_list,
+				int*  k_walls_start,				
 				real* k_coll_x,
 				real* k_coll_y,
 				real* k_coll_z,
@@ -63,8 +64,12 @@ void class_system::print_output(dim3 numBlocks,
 		    k_cxx, k_cxy, k_cyy, k_cxz, k_cyz, k_czz, step);
   //---- Walls are written ----
   if (wall == 1)
-    if (step % freq_walls== 0)
+    if (step % freq_walls== 0) {
+      calculate_force_walls(numBlocks, threadsPerBlock,
+			    k_fx_wall, k_fy_wall, k_fz_wall,
+			    k_fx, k_fy, k_fz, k_walls_list, k_walls_start);
       print_walls(k_fx_wall, k_fy_wall, k_fz_wall, step);
+    }
   //---- Colloids are written ----
   if (N_colloids > 0)
     if (step % freq_colloids == 0)
@@ -74,8 +79,7 @@ void class_system::print_output(dim3 numBlocks,
 		     k_fx_colloid, k_fy_colloid, k_fz_colloid,
 		     k_tx_colloid, k_ty_colloid, k_tz_colloid, step);    
   //---- Macro variables are written ----
-  if (step % freq_macro == 0) 
+  if (step % freq_macro == 0)
     print_macro_vars(numBlocks, threadsPerBlock, k_mass, k_vx, k_vy, k_vz,
-		     k_type, k_coll_vx, k_coll_vy, k_coll_vz, k_kin_energy, step);
-
+		     k_type, k_coll_vx, k_coll_vy, k_coll_vz, k_kin_energy, step);    
 }

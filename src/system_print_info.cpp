@@ -71,7 +71,7 @@ void class_system::print_info() {
 		  << coll_x[i] << " " << coll_y[i] << "\n";
     std::cout << "Number of particles in colloids list, Nlist_colloids = " << Nlist_colloids << "\n";
   }
-  if (N_colloids >= 2) {
+  if (N_colloids >= 1) {
     std::cout << "colloids repulsion cutoff (surface-surface) = " << coll_rep_cutoff << "\n";
     std::cout << "colloids repulsion cuton (surface-surface)  = " << coll_rep_cuton << "\n";
     std::cout << "colloids repulsion cutoff (center-center)   = " << rcutoff_coll_rep << "\n";
@@ -81,7 +81,7 @@ void class_system::print_info() {
     std::cout << "Magnetic force cutoff                       = " << r0_magnet << "\n";
     std::cout << "Magnetic force cutoff square                = " << r0_magnet_sq << "\n";  
     std::cout << "Magnetic force magnitude                    = " << F0_magnet << "\n";
-    std::cout << "Magnetic force angular velocity             = " << omega_magnet << "\n";    
+    std::cout << "Magnetic force angular velocity             = " << omega_magnet << "\n";     
     std::cout << "colloids cutoff                             = " << rcutoff_coll << "\n";
     std::cout << "Colloids cell size                          = " << cell_colloids_size[0]
 	      << " " << cell_colloids_size[1] << " " << cell_colloids_size[2] << " \n";

@@ -70,8 +70,7 @@ __global__ void kernel_move_colloids_VV_part1(real* __restrict__ coll_x,
     coll_omegay[i] += half_dt_over_I * ty_colloid[i];
     omega = sqrt(coll_omegax[i] * coll_omegax[i] +
 		 coll_omegay[i] * coll_omegay[i] +
-		 coll_omegaz[i] * coll_omegaz[i]);
-    
+		 coll_omegaz[i] * coll_omegaz[i]);    
   }
 
   //--- Position at t + dt ---

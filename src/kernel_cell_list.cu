@@ -61,4 +61,3 @@ __global__ void kernel_cell_list(real* __restrict__ x,
   particle_index[i] = i;
 
 }
-
